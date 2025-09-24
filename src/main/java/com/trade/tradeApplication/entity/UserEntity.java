@@ -7,16 +7,16 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false, unique = true)
+    @Column(name="email",nullable = false, unique = true)
     private String email; // логин
-    @Column(nullable = false)
+    @Column(name="first_name",nullable = false)
     private String firstName;
-    @Column(nullable = false)
+    @Column(name="last_name",nullable = false)
     private String lastName;
-    @Column(nullable = false)
+    @Column(name="phone",nullable = false)
     private String phone;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name="role",nullable = false)
     private Role role;
     private String image;
     public enum Role { USER, ADMIN }

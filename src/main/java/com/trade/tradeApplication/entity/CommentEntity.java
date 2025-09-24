@@ -10,9 +10,9 @@ public class CommentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
-    @Column(length = 1024, nullable = false)
+    @Column(name="text", length = 1024)
     private String text;
-    @Column(nullable = false)
+    @Column(name="created_at")
     private Long createdAt;
 
     public CommentEntity() {
