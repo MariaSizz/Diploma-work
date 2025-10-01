@@ -95,7 +95,6 @@ public class User {
         this.image = image;
     }
 
-    public enum Role{USER, ADMIN}
 
 
 }

@@ -1,28 +1,27 @@
 package com.trade.tradeApplication.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class CreateOrUpdateAd {
 
     @NotNull(message = "Значение заголовка объявления не может быть пустым")
-    @Min(value = 4, message = "Заголовок объявления выходит за пределы минимального значения")
-    @Max(value = 32, message = "Заголовок объявления выходит за пределы максимального значения")
+    @Size(min = 4, max = 32, message = "Заголовок объявления должен быть от 4 до 32 символов")
     @Schema(description = "Заголовок объявления")
     private String title;
 
 
     @NotNull(message = "Значение цены объявления не может быть пустым")
-    @Min(value = 0, message = "Цена объявления выходит за пределы минимального значения")
-    @Max(value = 10000000, message = "Цена объявления выходит за пределы максимального значения")
+    @Size(min = 0, max = 10000000, message = "Цена объявления должна быть в пределах от 0 до 10000000 у.е.")
     @Schema(description = "Цена объявления")
     private Integer price;
 
     @NotNull(message = "Значение описания объявления не может быть пустым")
-    @Min(value = 8, message = "Описание объявления выходит за пределы минимального значения")
-    @Max(value = 64, message = "Описание объявления выходит за пределы максимального значения")
+    @Size(min = 8, max = 64, message = "Описание объявления должно быть от 8 до 64 символов")
     @Schema(description = "Описание объявления")
     private String description;
 

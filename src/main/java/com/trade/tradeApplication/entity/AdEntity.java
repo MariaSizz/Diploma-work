@@ -1,6 +1,6 @@
 package com.trade.tradeApplication.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 @Entity
 @Table(name = "ads")
 public class AdEntity {

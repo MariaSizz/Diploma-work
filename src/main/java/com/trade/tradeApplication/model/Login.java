@@ -1,22 +1,21 @@
 package com.trade.tradeApplication.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class Login implements Serializable {
     @NotNull(message = "Значение не может быть пустым")
-    @Min(value = 4, message = "Логин выходит за пределы минимального значения")
-    @Max(value = 32, message = "Логин выходит за пределы максимального значения")
+    @Size(min = 4, max = 32, message = "Логин должен быть от 4 до 32 символов")
     @Schema(description = "Логин")
     private String username;
 
     @NotNull(message = "Значение не может быть пустым")
-    @Min(value = 8, message = "Пароль выходит за пределы минимального значения")
-    @Max(value = 16, message = "Пароль выходит за пределы максимального значения")
+    @Size(min = 8, max = 16, message = "Пароль должен быть от 8 до 16 символов")
     @Schema(description = "Пароль")
     private String password;
 
@@ -43,9 +42,5 @@ public Role role;
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    public enum Role{
-        USER,
-        ADMIN
     }
 }

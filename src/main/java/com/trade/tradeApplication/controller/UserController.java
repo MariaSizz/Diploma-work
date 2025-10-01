@@ -3,21 +3,29 @@ package com.trade.tradeApplication.controller;
 import com.trade.tradeApplication.model.NewPassword;
 import com.trade.tradeApplication.model.UpdateUser;
 import com.trade.tradeApplication.model.User;
+import com.trade.tradeApplication.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.StringToClassMapItem;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Tag(name = "Пользователи", description = "API для работы с пользователями")
 @RestController
 @RequestMapping
 public class UserController {
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @Operation(
             summary = "Обновление пароля",
@@ -32,8 +40,8 @@ public class UserController {
             }
     )
     @PostMapping("/users/set_password")
-    public ResponseEntity<Void> setPassword(@org.springframework.web.bind.annotation.RequestBody NewPassword newPassword) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> setPassword(@Valid @org.springframework.web.bind.annotation.RequestBody NewPassword password, Authentication authentication) {
+        return userService.setPassword(password, authentication);
     }
 
     @Operation(
@@ -45,8 +53,8 @@ public class UserController {
             }
     )
     @GetMapping("/users/me")
-    public ResponseEntity<User> getUser () {
-        return ResponseEntity.ok(new User());
+    public ResponseEntity<User> getUser (Authentication authentication) {
+        return userService.getCurrentUser(authentication);
     }
 
     @Operation(
@@ -62,8 +70,8 @@ public class UserController {
             }
     )
     @PatchMapping("/users/me")
-    public ResponseEntity<UpdateUser> updateUser (@org.springframework.web.bind.annotation.RequestBody UpdateUser  updateUser ) {
-        return new ResponseEntity<>(new UpdateUser(), HttpStatus.FORBIDDEN);
+    public ResponseEntity<UpdateUser> updateUser (@Valid @org.springframework.web.bind.annotation.RequestBody UpdateUser  updateUser, Authentication authentication) {
+        return userService.updateCurrentUser(updateUser, authentication);
     }
 
     @Operation(
@@ -71,10 +79,7 @@ public class UserController {
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(mediaType = "multipart/form-data",
-                            schema = @Schema(type = "object", requiredProperties = {"image"},
-                                    properties = {
-                                            @StringToClassMapItem(key = "image", value = String.class)
-                                    }
+                            schema = @Schema(type = "object", requiredProperties = {"image"}
                             )
                     )
             ),
@@ -84,7 +89,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/users/me/image", consumes = "multipart/form-data")
-    public ResponseEntity<Void> updateUserImage(@RequestParam("image") String image) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> updateUserImage(@RequestParam("image") String image, Authentication authentication) {
+        return userService.updateUserImage(image, authentication);
     }
 }

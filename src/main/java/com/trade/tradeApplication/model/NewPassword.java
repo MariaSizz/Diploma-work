@@ -1,22 +1,21 @@
 package com.trade.tradeApplication.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class NewPassword {
     @NotNull(message = "Значение текущего пароля не может быть пустым")
-    @Min(value = 8, message = "Текущий пароль выходит за пределы минимального значения")
-    @Max(value = 16, message = "Текущий пароль выходит за пределы максимального значения")
+    @Size(min = 8, max = 16, message = "Текущий пароль должен быть от 8 до 16 символов")
     @Schema(description = "Текущий пароль")
     private String currentPassword;
 
     @NotNull(message = "Значение нового пароля не может быть пустым")
-    @Min(value = 8, message = "Новый пароль выходит за пределы минимального значения")
-    @Max(value = 16, message = "Новый пароль выходит за пределы максимального значения")
+    @Size(min = 8, max = 16, message = "Новый пароль должен быть от 8 до 16 символов")
     @Schema(description = "Новый пароль")
     private String newPassword;
+
 
 
     public NewPassword() {

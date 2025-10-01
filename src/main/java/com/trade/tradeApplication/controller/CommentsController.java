@@ -3,20 +3,30 @@ package com.trade.tradeApplication.controller;
 import com.trade.tradeApplication.model.Comment;
 import com.trade.tradeApplication.model.Comments;
 import com.trade.tradeApplication.model.CreateOrUpdateComment;
+import com.trade.tradeApplication.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.*;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Tag(name = "Комментарии", description = "API для работы с комментариями")
     @RestController
     @RequestMapping
     public class CommentsController {
+
+        private final CommentService commentService;
+
+        public CommentsController(CommentService commentService) {
+            this.commentService = commentService;
+        }
 
         @Operation(
                 summary = "Получение комментариев объявления",
@@ -30,9 +40,9 @@ import org.springframework.web.bind.annotation.*;
                         @ApiResponse(responseCode = "404", description = "Not found")
                 }
         )
-        @GetMapping("/ads/{adId}")
+        @GetMapping("/ads/{adId}/comments")
         public ResponseEntity<Comments> getComments(@PathVariable("adId") int adId) {
-            return new ResponseEntity<>(new Comments(), HttpStatus.FORBIDDEN);
+            return commentService.getCommentsByAdId(adId);
         }
 
         @Operation(
@@ -51,10 +61,9 @@ import org.springframework.web.bind.annotation.*;
                         @ApiResponse(responseCode = "404", description = "Not found")
                 }
         )
-        @PostMapping("/ads/{adId}")
-        public ResponseEntity<Comment> addComment(@PathVariable("adId") int adId, @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateComment comment) {
-            Comment created =new Comment();
-            return new ResponseEntity<>(new Comment(), HttpStatus.FORBIDDEN);
+        @PostMapping("/ads/{adId}/comments")
+        public ResponseEntity<Comment> addComment(@PathVariable("adId") int adId, @Valid @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateComment comment, Authentication authentication) {
+            return commentService.createComment(adId, comment, authentication);
         }
 
         @Operation(
@@ -70,9 +79,9 @@ import org.springframework.web.bind.annotation.*;
                         @ApiResponse(responseCode = "404", description = "Not found")
                 }
         )
-        @DeleteMapping("/ads/{adId}/{commentId}")
-        public ResponseEntity<Void> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
-            return ResponseEntity.badRequest().build();
+        @DeleteMapping("/ads/{adId}/comments/{commentId}")
+        public ResponseEntity<Void> deleteComment(@PathVariable int adId, @PathVariable int commentId, Authentication authentication) {
+            return commentService.deleteComment(adId, commentId, authentication);
         }
 
         @Operation(
@@ -93,10 +102,9 @@ import org.springframework.web.bind.annotation.*;
                         @ApiResponse(responseCode = "404", description = "Not found")
                 }
         )
-        @PatchMapping("/ads/{adId}/{commentId}")
+        @PatchMapping("/ads/{adId}/comments/{commentId}")
         public ResponseEntity<Comment> updateComment(@PathVariable int adId, @PathVariable int commentId,
-                                                     @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateComment update) {
-            Comment updated =new Comment();
-            return new ResponseEntity<>(new Comment(), HttpStatus.FORBIDDEN);
+                                                     @Valid @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateComment update, Authentication authentication) {
+            return commentService.updateComment(adId, commentId, update, authentication);
         }
 }

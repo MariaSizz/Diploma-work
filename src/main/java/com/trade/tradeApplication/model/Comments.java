@@ -3,12 +3,13 @@ package com.trade.tradeApplication.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Comments {
     @Schema(description = "Общее количество комментариев")
     private  Integer count;
 
-    private ArrayList<Comment> results;
+    private List<Comment> results;
 
     public Comments() {
     }
@@ -26,11 +27,11 @@ public class Comments {
         this.count = count;
     }
 
-    public ArrayList<Comment> getResults() {
+    public List<Comment> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Comment> results) {
+    public void setResults(List<Comment> results) {
         this.results = results;
     }
 }

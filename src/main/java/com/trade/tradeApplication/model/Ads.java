@@ -3,12 +3,13 @@ package com.trade.tradeApplication.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Ads {
     @Schema(description = "Общее количество объявлений")
     private  Integer count;
 
-    private ArrayList<Ad> results;
+    private List<Ad> results;
 
     public Ads() {
     }
@@ -26,11 +27,11 @@ public class Ads {
         this.count = count;
     }
 
-    public ArrayList<Ad> getResults() {
+    public List<Ad> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Ad> results) {
+    public void setResults(List<Ad> results) {
         this.results = results;
     }
 }

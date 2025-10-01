@@ -1,6 +1,7 @@
 package com.trade.tradeApplication.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
@@ -10,13 +11,13 @@ public class CommentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
-    @Column(name="text", length = 1024)
+    @Column(length = 1024, nullable = false)
     private String text;
-    @Column(name="created_at")
+    @Column(nullable = false)
     private Long createdAt;
-
-    public CommentEntity() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id")
+    private AdEntity ad;
 
     public CommentEntity(Integer pk, UserEntity author, String text, Long createdAt) {
         this.pk = pk;
@@ -31,6 +32,17 @@ public class CommentEntity {
 
     public void setPk(Integer pk) {
         this.pk = pk;
+    }
+
+    public AdEntity getAd() {
+        return ad;
+    }
+
+    public void setAd(AdEntity ad) {
+        this.ad = ad;
+    }
+
+    public CommentEntity() {
     }
 
     public UserEntity getAuthor() {

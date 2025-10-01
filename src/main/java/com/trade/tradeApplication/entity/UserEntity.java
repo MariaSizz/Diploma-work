@@ -1,5 +1,14 @@
 package com.trade.tradeApplication.entity;
-import jakarta.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import com.trade.tradeApplication.model.Role;
+
 
 @Entity
 @Table(name = "users")
@@ -7,31 +16,40 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name="email",nullable = false, unique = true)
-    private String email; // логин
-    @Column(name="first_name",nullable = false)
+    @Column(nullable = false, unique = true)
+    private String username;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
     private String firstName;
-    @Column(name="last_name",nullable = false)
+    @Column(nullable = false)
     private String lastName;
-    @Column(name="phone",nullable = false)
+    @Column(nullable = false)
     private String phone;
     @Enumerated(EnumType.STRING)
-    @Column(name="role",nullable = false)
+    @Column(nullable = false)
     private Role role;
     private String image;
-    public enum Role { USER, ADMIN }
+
 
     public UserEntity() {
     }
 
-    public UserEntity(Integer id, String email, String firstName, String lastName, String phone, Role role, String image) {
+    public UserEntity(Integer id, String username, String firstName, String lastName, String phone, Role role, String image) {
         this.id = id;
-        this.email = email;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.role = role;
         this.image = image;
+    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getId() {
@@ -42,12 +60,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String email) {
+        this.username = email;
     }
 
     public String getFirstName() {
@@ -74,11 +92,11 @@ public class UserEntity {
         this.phone = phone;
     }
 
-    public Role getRole() {
+    public com.trade.tradeApplication.model.Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(com.trade.tradeApplication.model.Role role) {
         this.role = role;
     }
 

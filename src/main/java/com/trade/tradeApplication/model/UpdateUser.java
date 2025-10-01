@@ -1,22 +1,19 @@
 package com.trade.tradeApplication.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import javax.validation.constraints.*;
+
+import javax.validation.constraints.*;
 
 public class UpdateUser {
 
     @NotNull(message = "Значение имени не может быть пустым")
-    @Min(value = 3, message = "Имя выходит за пределы минимального значения")
-    @Max(value = 10, message = "Имя выходит за пределы максимального значения")
+    @Size(min = 3, max = 10, message = "Имя должно быть от 3 до 10 символов")
     @Schema(description = "Имя пользователя")
     private String firstName;
 
     @NotNull(message = "Значение фамилии не может быть пустым")
-    @Min(value = 3, message = "Фамилия выходит за пределы минимального значения")
-    @Max(value = 10, message = "Фамилия выходит за пределы максимального значения")
+    @Size(min = 3, max = 10, message = "Фамилия должна быть от 3 до 10 символов")
     @Schema(description = "Фамилия пользователя")
     private String lastName;
 

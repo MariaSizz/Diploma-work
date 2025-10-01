@@ -1,36 +1,30 @@
 package com.trade.tradeApplication.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+
+import javax.validation.constraints.*;
 
 public class Register {
     @NotNull(message = "Значение логина не может быть пустым")
-    @Min(value = 4, message = "Текущий логин выходит за пределы минимального значения")
-    @Max(value = 32, message = "Текущий логин выходит за пределы максимального значения")
+    @Size(min = 4, max = 32, message = "Текущий логин должен быть от 4 до 32 символов")
     @Schema(description = "Логин")
     private String username;
 
 
     @NotNull(message = "Значение текущего пароля не может быть пустым")
-    @Min(value = 8, message = "Текущий пароль выходит за пределы минимального значения")
-    @Max(value = 16, message = "Текущий пароль выходит за пределы максимального значения")
+    @Size(min = 8, max = 16, message = "Текущий пароль должен быть от 4 до 32 символов")
     @Schema(description = "Пароль")
     private String password;
 
 
     @NotNull(message = "Значение имени не может быть пустым")
-    @Min(value = 2, message = "Имя выходит за пределы минимального значения")
-    @Max(value = 16, message = "Имя выходит за пределы максимального значения")
+    @Size(min = 2, max = 16, message = "Имя должно быть от 2 до 16 символов")
     @Schema(description = "Имя пользователя")
     private String firstName;
 
 
     @NotNull(message = "Значение фамилии не может быть пустым")
-    @Min(value = 2, message = "Фамилия выходит за пределы минимального значения")
-    @Max(value = 16, message = "Фамилия выходит за пределы максимального значения")
+    @Size(min = 2, max = 16, message = "Фамилия должно быть от 2 до 16 символов")
     @Schema(description = "Фамилия пользователя")
     private String lastName;
 
@@ -102,7 +96,5 @@ public class Register {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    public enum Role{USER, ADMIN}
 
 }
