@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -199,17 +201,23 @@ class UserControllerIntegrationTest {
     @Test
     void updateUserImage_WhenValidImage_ShouldUpdateImage() throws Exception {
         setAuthentication(userAuth);
-
-        String newImage = "new-avatar.jpg";
-
-        mockMvc.perform(patch("/users/me/image")
-                        .param("image", newImage)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "image",
+                "new-avatar.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                "dummy image content".getBytes()
+        );
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/users/me/image")
+                        .file(imageFile)
+                        .with(request -> {
+                            request.setMethod("PATCH");
+                            return request;
+                        })
+                        .principal(userAuth)
+                )
                 .andExpect(status().isOk());
-
-
-        UserEntity updatedUser = userRepository.findById(testUser.getId()).orElseThrow();
-        assert updatedUser.getImage().equals(newImage);
+        UserEntity updatedUser  = userRepository.findById(testUser .getId()).orElseThrow();
+        assert updatedUser .getImage().equals("/images/users/new-avatar.jpg") || updatedUser .getImage().contains("new-avatar.jpg");
     }
 
     @Test

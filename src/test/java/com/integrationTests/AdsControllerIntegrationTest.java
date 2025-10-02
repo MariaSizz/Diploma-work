@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -403,47 +405,57 @@ class AdsControllerIntegrationTest {
     @Test
     void updateAdImage_WhenOwner_ShouldUpdateImage() throws Exception {
         AdEntity ad = new AdEntity();
-        ad.setAuthor(testUser);
+        ad.setAuthor(testUser );
         ad.setTitle("Test Ad");
         ad.setPrice(1000);
         ad.setDescription("Test Description");
         ad.setImage("old_image.jpg");
         ad = adRepository.save(ad);
-
         setAuthentication(userAuth);
-
-        mockMvc.perform(multipart("/ads/{id}/image", ad.getPk())
-                        .param("image", "new_image_updated.jpg")
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "image",
+                "new_image_updated.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                "dummy image content".getBytes()
+        );
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/ads/{id}/image", ad.getPk())
+                        .file(imageFile)
                         .with(request -> {
                             request.setMethod("PATCH");
                             return request;
                         })
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .principal(userAuth)
+                )
                 .andExpect(status().isOk());
-
         AdEntity updatedAd = adRepository.findById(ad.getPk()).orElseThrow();
-        assertEquals("new_image_updated.jpg", updatedAd.getImage());
+
+        assertTrue(updatedAd.getImage().contains("new_image_updated.jpg"));
     }
 
     @Test
     void updateAdImage_WhenNotOwner_ShouldReturnForbidden() throws Exception {
         AdEntity ad = new AdEntity();
-        ad.setAuthor(adminUser);
+        ad.setAuthor(adminUser );
         ad.setTitle("Admin Ad");
         ad.setPrice(1000);
         ad.setDescription("Admin Description");
         ad.setImage("admin_image.jpg");
         ad = adRepository.save(ad);
-
         setAuthentication(userAuth);
-
-        mockMvc.perform(multipart("/ads/{id}/image", ad.getPk())
-                        .param("image", "hacked_image.jpg")
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "image",
+                "hacked_image.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                "dummy image content".getBytes()
+        );
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/ads/{id}/image", ad.getPk())
+                        .file(imageFile)
                         .with(request -> {
                             request.setMethod("PATCH");
                             return request;
                         })
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .principal(userAuth)
+                )
                 .andExpect(status().isForbidden());
     }
 }

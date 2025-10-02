@@ -75,7 +75,6 @@ class AuthorizationControllerIntegrationTest {
 
     @Test
     void register_WhenUsernameAlreadyExists_ShouldReturnBadRequest() throws Exception {
-        // Сначала создаем пользователя
         UserEntity existingUser = new UserEntity();
         existingUser.setUsername("existinguser");
         existingUser.setPassword(passwordEncoder.encode("password123"));

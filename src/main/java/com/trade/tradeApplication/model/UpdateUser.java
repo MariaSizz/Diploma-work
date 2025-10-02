@@ -3,8 +3,6 @@ package com.trade.tradeApplication.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.*;
 
-import javax.validation.constraints.*;
-
 public class UpdateUser {
 
     @NotNull(message = "Значение имени не может быть пустым")

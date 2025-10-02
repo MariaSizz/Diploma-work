@@ -11,6 +11,8 @@ public interface CommentService {
     ResponseEntity<Comments> getCommentsByAdId(int adId);
 
     ResponseEntity<Comment> createComment(int adId, CreateOrUpdateComment dto, Authentication auth);
+
     ResponseEntity<Comment> updateComment(int adId, int commentId, CreateOrUpdateComment dto, Authentication auth);
+
     ResponseEntity<Void> deleteComment(int adId, int commentId, Authentication auth);
 }
