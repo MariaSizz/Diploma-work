@@ -125,7 +125,7 @@ class UserControllerIntegrationTest {
         setAuthentication(userAuth);
 
         UpdateUser updateUser = new UpdateUser();
-        updateUser.setFirstName("Jo"); // Слишком короткое имя (< 3)
+        updateUser.setFirstName("Jo");
         updateUser.setLastName("Smith");
         updateUser.setPhone("+79876543210");
 
@@ -142,7 +142,7 @@ class UserControllerIntegrationTest {
         UpdateUser updateUser = new UpdateUser();
         updateUser.setFirstName("Jane");
         updateUser.setLastName("Smith");
-        updateUser.setPhone("invalid-phone"); // Неверный формат телефона
+        updateUser.setPhone("invalid-phone");
 
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -174,7 +174,7 @@ class UserControllerIntegrationTest {
 
         NewPassword newPassword = new NewPassword();
         newPassword.setCurrentPassword(testUserPassword);
-        newPassword.setNewPassword("short"); // Слишком короткий пароль (< 8)
+        newPassword.setNewPassword("short");
 
         mockMvc.perform(post("/users/set_password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -188,7 +188,7 @@ class UserControllerIntegrationTest {
 
         NewPassword newPassword = new NewPassword();
         newPassword.setCurrentPassword(testUserPassword);
-        newPassword.setNewPassword("thispasswordistoolong123"); // Слишком длинный пароль (> 16)
+        newPassword.setNewPassword("thispasswordistoolong123");
 
         mockMvc.perform(post("/users/set_password")
                         .contentType(MediaType.APPLICATION_JSON)

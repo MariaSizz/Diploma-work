@@ -66,11 +66,10 @@ class AdsControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        // Генерируем уникальные username для каждого теста
+
         uniqueUsername = "testuser_" + UUID.randomUUID().toString().substring(0, 8);
         uniqueAdminUsername = "adminuser_" + UUID.randomUUID().toString().substring(0, 8);
 
-        // Создаем тестового пользователя
         testUser = new UserEntity();
         testUser.setUsername(uniqueUsername);
         testUser.setPassword(passwordEncoder.encode("password123"));
@@ -80,7 +79,6 @@ class AdsControllerIntegrationTest {
         testUser.setRole(Role.USER);
         testUser = userRepository.save(testUser);
 
-        // Создаем админа
         adminUser = new UserEntity();
         adminUser.setUsername(uniqueAdminUsername);
         adminUser.setPassword(passwordEncoder.encode("adminpass123"));
@@ -90,13 +88,11 @@ class AdsControllerIntegrationTest {
         adminUser.setRole(Role.ADMIN);
         adminUser = userRepository.save(adminUser);
 
-        // Создаем аутентификацию для пользователя
         CustomUserDetails userDetails = new CustomUserDetails(testUser);
         userAuth = new UsernamePasswordAuthenticationToken(
                 userDetails, null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
 
-        // Создаем аутентификацию для админа
         CustomUserDetails adminDetails = new CustomUserDetails(adminUser);
         adminAuth = new UsernamePasswordAuthenticationToken(
                 adminDetails, null, List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
@@ -234,7 +230,7 @@ class AdsControllerIntegrationTest {
     }
     @Test
     void updateAd_WhenOwner_ShouldUpdateAd() throws Exception {
-        // Создаем объявление от testUser
+
         AdEntity ad = new AdEntity();
         ad.setAuthor(testUser);
         ad.setTitle("Original Title");
@@ -261,7 +257,7 @@ class AdsControllerIntegrationTest {
 
     @Test
     void updateAd_WhenAdmin_ShouldUpdateAnyAd() throws Exception {
-        // Создаем объявление от testUser
+
         AdEntity ad = new AdEntity();
         ad.setAuthor(testUser);
         ad.setTitle("Original Title");
@@ -287,7 +283,7 @@ class AdsControllerIntegrationTest {
 
     @Test
     void updateAd_WhenNotOwner_ShouldReturnForbidden() throws Exception {
-        // Создаем объявление от adminUser
+
         AdEntity ad = new AdEntity();
         ad.setAuthor(adminUser);
         ad.setTitle("Admin Ad");
@@ -296,7 +292,7 @@ class AdsControllerIntegrationTest {
         ad.setImage("admin.jpg");
         ad = adRepository.save(ad);
 
-        setAuthentication(userAuth); // Пытаемся обновить чужое объявление
+        setAuthentication(userAuth);
 
         String updateJson = "{" +
                 "\"title\": \"Hacked Title\"," +
@@ -325,7 +321,6 @@ class AdsControllerIntegrationTest {
         mockMvc.perform(delete("/ads/{id}", ad.getPk()))
                 .andExpect(status().isOk());
 
-        // Проверяем через репозиторий, что объявление удалено
         Optional<AdEntity> deletedAd = adRepository.findById(ad.getPk());
         assertThat(deletedAd).isEmpty();
     }

@@ -55,7 +55,7 @@ class AuthServiceIntegrationTest {
 
     @Test
     void login_WhenValidCredentials_ShouldReturnTrue() {
-        // Создаем пользователя напрямую в БД
+
         UserEntity user = new UserEntity();
         user.setUsername("testuser");
         user.setPassword(passwordEncoder.encode("password123"));

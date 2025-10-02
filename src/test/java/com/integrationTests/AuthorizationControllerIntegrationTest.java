@@ -35,10 +35,10 @@ class AuthorizationControllerIntegrationTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private AdRepository adRepository; // Добавьте это
+    private AdRepository adRepository;
 
     @Autowired
-    private CommentRepository commentRepository; // Если есть
+    private CommentRepository commentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -85,7 +85,6 @@ class AuthorizationControllerIntegrationTest {
         existingUser.setRole(Role.USER);
         userRepository.save(existingUser);
 
-        // Пытаемся зарегистрировать с тем же username
         Register register = new Register();
         register.setUsername("existinguser");
         register.setPassword("newpassword123");
@@ -102,7 +101,7 @@ class AuthorizationControllerIntegrationTest {
 
     @Test
     void login_WhenValidCredentials_ShouldReturnOk() throws Exception {
-        // Сначала регистрируем пользователя
+
         UserEntity user = new UserEntity();
         user.setUsername("testuser");
         user.setPassword(passwordEncoder.encode("password123"));

@@ -39,12 +39,11 @@ public class UserServiceImpl implements UserService {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        // Обновляем поля пользователя (например, через маппер)
         UserEntity updatedEntity = userMapper.toEntityFromUpdateUser (updateUser );
         updatedEntity.setUsername(user.getUsername());
         updatedEntity.setRole(user.getRole());
-        updatedEntity.setId(user.getId()); // сохранить id текущего пользователя
-        updatedEntity.setPassword(user.getPassword()); // сохранить пароль, если не меняется
+        updatedEntity.setId(user.getId());
+        updatedEntity.setPassword(user.getPassword());
 
         userRepository.save(updatedEntity);
 

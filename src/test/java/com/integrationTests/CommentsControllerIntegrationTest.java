@@ -119,15 +119,11 @@ class CommentsControllerIntegrationTest {
     void getComments_WhenAdExists_ShouldReturnComments() throws Exception {
         setAuthentication(userAuth);
 
-        // ДОБАВЬТЕ ЭТУ ОТЛАДОЧНУЮ ИНФОРМАЦИЮ
         System.out.println("=== DEBUG INFO ===");
         System.out.println("Test Ad ID: " + testAd.getPk());
         System.out.println("Test Comment ID: " + testComment.getPk());
         System.out.println("Comment Ad ID: " + (testComment.getAd() != null ? testComment.getAd().getPk() : "NULL"));
 
-
-
-        // Проверяем все комментарии в БД
         List<CommentEntity> allComments = commentRepository.findAll();
         System.out.println("Total comments in DB: " + allComments.size());
         allComments.forEach(c -> System.out.println("Comment " + c.getPk() + " -> Ad: " +
@@ -153,9 +149,8 @@ class CommentsControllerIntegrationTest {
 
     @Test
     void getComments_WhenNoComments_ShouldReturnEmptyList() throws Exception {
-        setAuthentication(userAuth); // Добавляем аутентификацию
+        setAuthentication(userAuth);
 
-        // Создаем новое объявление без комментариев
         AdEntity newAd = new AdEntity();
         newAd.setAuthor(testUser);
         newAd.setTitle("New Ad");
@@ -173,7 +168,7 @@ class CommentsControllerIntegrationTest {
 
     @Test
     void getComments_WhenNotAuthenticated_ShouldReturnUnauthorized() throws Exception {
-        // Не устанавливаем аутентификацию
+
         mockMvc.perform(get("/ads/{adId}/comments", testAd.getPk()))
                 .andExpect(status().isUnauthorized());
     }
@@ -244,7 +239,6 @@ class CommentsControllerIntegrationTest {
         mockMvc.perform(delete("/ads/{adId}/comments/{commentId}", testAd.getPk(), testComment.getPk()))
                 .andExpect(status().isOk());
 
-        // Проверяем, что комментарий удалился из базы
         boolean exists = commentRepository.existsById(testComment.getPk());
         assert !exists;
     }
@@ -256,14 +250,13 @@ class CommentsControllerIntegrationTest {
         mockMvc.perform(delete("/ads/{adId}/comments/{commentId}", testAd.getPk(), testComment.getPk()))
                 .andExpect(status().isOk());
 
-        // Проверяем, что комментарий удалился из базы
         boolean exists = commentRepository.existsById(testComment.getPk());
         assert !exists;
     }
 
     @Test
     void deleteComment_WhenNotAuthor_ShouldReturnForbidden() throws Exception {
-        // Создаем другого пользователя
+
         UserEntity otherUser = new UserEntity();
         otherUser.setUsername("other@example.com");
         otherUser.setPassword(passwordEncoder.encode("password123"));
@@ -345,7 +338,7 @@ class CommentsControllerIntegrationTest {
 
     @Test
     void updateComment_WhenNotAuthor_ShouldReturnForbidden() throws Exception {
-        // Создаем другого пользователя
+
         UserEntity otherUser = new UserEntity();
         otherUser.setUsername("other@example.com");
         otherUser.setPassword(passwordEncoder.encode("password123"));
