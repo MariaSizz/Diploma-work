@@ -1,0 +1,70 @@
+package com.trade.tradeApplication.model;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public class Ad {
+@Schema(description = "id автора объявления")
+    private  Integer author;
+    @Schema(description = "Ссылка на картинку объявления")
+    private String image;
+
+    @Schema(description = "id объявления")
+    private  Integer pk;
+
+    @Schema(description = "Цена объявления")
+    private  Integer price;
+
+    @Schema(description = "Заголовок объявления")
+    private String title;
+
+    public Ad() {
+    }
+
+    public Ad(Integer author, String image, Integer pk, Integer price, String title) {
+        this.author = author;
+        this.image = image;
+        this.pk = pk;
+        this.price = price;
+        this.title = title;
+    }
+
+    public Integer getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Integer author) {
+        this.author = author;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Integer getPk() {
+        return pk;
+    }
+
+    public void setPk(Integer pk) {
+        this.pk = pk;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+}
