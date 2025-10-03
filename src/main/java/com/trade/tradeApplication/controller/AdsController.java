@@ -42,6 +42,7 @@ public class AdsController {
             }
     )
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Ads> getAllAds() {
         return new ResponseEntity<>(adService.getAllAds(), HttpStatus.OK);
     }
@@ -63,7 +64,8 @@ public class AdsController {
             }
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdEntity> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") String image, Authentication authentication) {
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<AdEntity> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image, Authentication authentication) {
         return adService.createAd(properties, image, authentication);
     }
 
@@ -80,6 +82,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<ExtendedAd> getAds(@PathVariable int id) {
        return adService.getAdById(id);
     }
@@ -97,6 +100,7 @@ public class AdsController {
             }
     )
     @DeleteMapping("/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Void> removeAd(@PathVariable int id, Authentication auth) {
         return adService.deleteAd(id, auth);
     }
@@ -119,6 +123,7 @@ public class AdsController {
             }
     )
     @PatchMapping("/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Ad> updateAds(@PathVariable int id, @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateAd update, Authentication authentication) {
         return adService.updateAd(id, update, authentication);
     }
@@ -132,6 +137,7 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Ads> getAdsMe(Authentication authentication) {
         return adService.getMyAds(authentication);
     }
@@ -159,11 +165,13 @@ public class AdsController {
             }
     )
     @PatchMapping(value = "/{id}/image", consumes = "multipart/form-data")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Void> updateImage(@PathVariable int id, @RequestParam("image") MultipartFile image, Authentication authentication) {
         return adService.updateAdImage(id, image, authentication);
     }
 
     @GetMapping(value = "/images/ads/{filename}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE})
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Resource> getAdImage(@PathVariable String filename) {
         return adService.getAdImage(filename);
     }

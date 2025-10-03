@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,13 +61,28 @@ public class AdServiceImpl implements AdService {
     }
 
 
-    public ResponseEntity<AdEntity> createAd(CreateOrUpdateAd dto, String image, Authentication auth) {
+    public ResponseEntity<AdEntity> createAd(CreateOrUpdateAd dto, MultipartFile imageFile, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
         AdEntity adEntity = adMapper.toAdEntity(dto);
         adEntity.setAuthor(user);
-        adEntity.setImage(image);
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get("uploads/images/ads");
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                Path filePath = uploadPath.resolve(filename);
+                try (InputStream inputStream = imageFile.getInputStream()) {
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                }
+                adEntity.setImage("/images/ads/" + filename);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         adRepository.save(adEntity);
         return new ResponseEntity<>(adEntity, HttpStatus.CREATED);
     }

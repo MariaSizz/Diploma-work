@@ -43,6 +43,7 @@ public class UserController {
             }
     )
     @PostMapping("/users/set_password")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Void> setPassword(@Valid @org.springframework.web.bind.annotation.RequestBody NewPassword password, Authentication authentication) {
         return userService.setPassword(password, authentication);
     }
@@ -56,6 +57,7 @@ public class UserController {
             }
     )
     @GetMapping("/users/me")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<User> getUser (Authentication authentication) {
         return userService.getCurrentUser(authentication);
     }
@@ -73,6 +75,7 @@ public class UserController {
             }
     )
     @PatchMapping("/users/me")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<UpdateUser> updateUser (@Valid @org.springframework.web.bind.annotation.RequestBody UpdateUser  updateUser, Authentication authentication) {
         return userService.updateCurrentUser(updateUser, authentication);
     }
@@ -92,10 +95,12 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/users/me/image", consumes = "multipart/form-data")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image, Authentication authentication) {
         return userService.updateUserImage(image, authentication);
     }
     @GetMapping(value = "/images/users/{filename}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE})
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Resource> getUserImage(@PathVariable String filename) {
         return userService.getUserImage(filename);
     }

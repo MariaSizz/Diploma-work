@@ -41,6 +41,7 @@ import javax.validation.Valid;
                 }
         )
         @GetMapping("/ads/{adId}/comments")
+        @CrossOrigin(origins = "http://localhost:3000")
         public ResponseEntity<Comments> getComments(@PathVariable("adId") int adId) {
             return commentService.getCommentsByAdId(adId);
         }
@@ -62,6 +63,7 @@ import javax.validation.Valid;
                 }
         )
         @PostMapping("/ads/{adId}/comments")
+        @CrossOrigin(origins = "http://localhost:3000")
         public ResponseEntity<Comment> addComment(@PathVariable("adId") int adId, @Valid @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateComment comment, Authentication authentication) {
             return commentService.createComment(adId, comment, authentication);
         }
@@ -80,6 +82,7 @@ import javax.validation.Valid;
                 }
         )
         @DeleteMapping("/ads/{adId}/comments/{commentId}")
+        @CrossOrigin(origins = "http://localhost:3000")
         public ResponseEntity<Void> deleteComment(@PathVariable int adId, @PathVariable int commentId, Authentication authentication) {
             return commentService.deleteComment(adId, commentId, authentication);
         }
@@ -103,6 +106,7 @@ import javax.validation.Valid;
                 }
         )
         @PatchMapping("/ads/{adId}/comments/{commentId}")
+        @CrossOrigin(origins = "http://localhost:3000")
         public ResponseEntity<Comment> updateComment(@PathVariable int adId, @PathVariable int commentId,
                                                      @Valid @org.springframework.web.bind.annotation.RequestBody CreateOrUpdateComment update, Authentication authentication) {
             return commentService.updateComment(adId, commentId, update, authentication);

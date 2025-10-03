@@ -13,11 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface AdService {
 
-     Ads getAllAds();
+    Ads getAllAds();
 
-     ResponseEntity<ExtendedAd> getAdById(int id);
+    ResponseEntity<ExtendedAd> getAdById(int id);
 
-    ResponseEntity<AdEntity> createAd(CreateOrUpdateAd dto, String image, Authentication auth);
+    ResponseEntity<AdEntity> createAd(CreateOrUpdateAd dto, MultipartFile imageFile, Authentication auth);
 
     ResponseEntity<Ad> updateAd(int id, CreateOrUpdateAd update, Authentication auth);
 
