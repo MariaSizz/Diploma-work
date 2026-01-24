@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="10" author="team">
+        <createTable tableName="users">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)" />
+            <column name="last_name" type="varchar(255)" />
+            <column name="phone" type="varchar(255)" />
+            <column name="role" type="varchar(10)" />
+            <column name="image" type="varchar(255)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="11" author="team">
+        <createTable tableName="ads">
+            <column name="pk" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="author_id" type="int4">
+                <constraints nullable="false" />
+            </column>
+            <column name="image" type="varchar(255)" />
+            <column name="price" type="int4" />
+            <column name="title" type="varchar(255)" />
+            <column name="description" type="varchar(1024)" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="ads" baseColumnNames="author_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_ads_author"/>
+    </changeSet>
+
+    <changeSet id="12" author="team">
+        <createTable tableName="comments">
+            <column name="pk" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="author_id" type="int4">
+                <constraints nullable="false" />
+            </column>
+            <column name="text" type="varchar(1024)" />
+            <column name="created_at" type="int8" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="comments" baseColumnNames="author_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_comments_author"/>
+    </changeSet>
+
+    <changeSet id="4" author="team">
+        <addColumn tableName="comments">
+            <column name="ad_id" type="int4">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="comments" baseColumnNames="ad_id"
+                                 referencedTableName="ads" referencedColumnNames="pk"
+                                 constraintName="fk_comments_ad"/>
+    </changeSet>
+
+</databaseChangeLog>
